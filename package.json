@@ -10,9 +10,16 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"lint": "eslint . --ext .ts && prettier --config .prettierrc \"./src/**/*.ts\" --write"
 	},
-	"keywords": [],
+	"keywords": [
+		"nft",
+		"camera",
+		"solana",
+		"sms",
+		"solana-mobile-stack",
+		"nft-camera"
+	],
 	"author": "arihantbansal",
-	"license": "ISC",
+	"license": "MIT",
 	"dependencies": {
 		"@metaplex-foundation/js": "^0.14.0",
 		"@solana/web3.js": "^1.50.1",
