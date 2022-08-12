@@ -14,30 +14,39 @@ app.use(cors());
 app.use(morgan("dev"));
 
 app.get("/all/:id", async (req: Request, res: Response) => {
-	const myNfts = await metaplex
+	const allNfts = await metaplex
 		.nfts()
 		.findAllByOwner(new PublicKey(req.params.id))
 		.run();
 
 	return res.json({
-		data: myNfts,
+		data: allNfts,
 	});
 });
 
 app.post("/mint", async (req: Request, res: Response) => {
-	const { name, description, url } = req.body;
+	const { name, description, url, account } = req.body;
 
-	const { uri } = await metaplex.nfts().uploadMetadata({
-		name,
-		description,
-		image: url,
-	});
+	const { uri } = await metaplex
+		.nfts()
+		.uploadMetadata({
+			name,
+			description,
+			image: url,
+		})
+		.run();
 
-	const { nft } = await metaplex.nfts().create({
-		uri: uri,
-	});
+	const { nft } = await metaplex
+		.nfts()
+		.create({
+			uri: uri,
+			name,
+			payer: account,
+			tokenOwner: account,
+		})
+		.run();
 
-	console.log(nft.mint.toBase58());
+	return res.json({ data: nft });
 });
 
 export default app;
