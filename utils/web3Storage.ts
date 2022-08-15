@@ -1,4 +1,4 @@
-import { Web3Storage } from "web3.storage";
+import { Web3Storage, File } from "web3.storage";
 import { API_TOKEN } from "./config";
 
 export const makeStorageClient = () => {
@@ -42,5 +42,5 @@ export const makeFileFromJSON = (
 
 	const buffer = Buffer.from(JSON.stringify(data));
 
-	return new File([buffer], `metadata-${data["name"]}.json`);
+	return new File([buffer], `metadata-${data["symbol"]}-${address}.json`);
 };
