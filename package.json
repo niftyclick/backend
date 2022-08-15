@@ -8,7 +8,7 @@
 		"start": "npm run build && node build/index.js",
 		"dev": "nodemon",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"lint": "eslint . --ext .ts && prettier --config .prettierrc \"./src/**/*.ts\" --write"
+		"lint": "eslint . --fix --ext .ts && prettier --config .prettierrc.json \"./**/*.ts\" --write"
 	},
 	"keywords": [
 		"nft",
@@ -38,6 +38,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.32.0",
 		"@typescript-eslint/parser": "^5.32.0",
 		"eslint": "^8.21.0",
+		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-prettier": "^4.2.1",
 		"nodemon": "^2.0.19",
 		"prettier": "^2.7.1",

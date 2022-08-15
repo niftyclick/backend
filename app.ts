@@ -24,29 +24,21 @@ app.get("/all/:id", async (req: Request, res: Response) => {
 	});
 });
 
-app.post("/mint", async (req: Request, res: Response) => {
-	const { name, description, url, account } = req.body;
-
+app.post("/uploadMetadata", async (req: Request, res: Response) => {
+	const { name, desc, image } = req.body;
 	const { uri } = await metaplex
 		.nfts()
 		.uploadMetadata({
 			name,
-			description,
-			image: url,
+			desc,
+			image,
 		})
 		.run();
+	console.log(uri); // https://arweave.net/789
 
-	const { nft } = await metaplex
-		.nfts()
-		.create({
-			uri: uri,
-			name,
-			payer: account,
-			tokenOwner: account,
-		})
-		.run();
-
-	return res.json({ data: nft });
+	return res.json({
+		data: uri,
+	});
 });
 
 export default app;
