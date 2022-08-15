@@ -2,8 +2,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import morgan from "morgan";
-import { File } from "web3.storage";
-import { makeStorageClient } from "./utils/web3Storage";
+import { makeStorageClient, makeFileFromJSON } from "./utils/web3Storage";
 
 const app = express();
 
@@ -13,17 +12,10 @@ app.use(cors());
 
 app.use(morgan("dev"));
 
-const makeFileFromJSON = (data) => {
-	const buffer = Buffer.from(JSON.stringify(data));
-
-	return new File([buffer], `metadata-${data["name"]}.json`);
-};
-
 app.post("/uploadMetadata", async (req: Request, res: Response) => {
-	// const { name, desc, image } = req.body;
+	const { name, desc, image, address } = req.body;
 
-	const obj = { hello: "world" };
-	const file = makeFileFromJSON(obj);
+	const file = makeFileFromJSON(name, desc, image, address);
 
 	const client = makeStorageClient();
 	const cid = await client.put([file]);

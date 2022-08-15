@@ -1,0 +1,26 @@
+diff --git a/node_modules/web3.storage/dist/src/lib/interface.d.ts b/node_modules/web3.storage/dist/src/lib/interface.d.ts
+index 5907830..e1237e1 100644
+--- a/node_modules/web3.storage/dist/src/lib/interface.d.ts
++++ b/node_modules/web3.storage/dist/src/lib/interface.d.ts
+@@ -11,7 +11,7 @@ export declare type Tagged<T, Tag> = T & {
+     tag?: Tag;
+ };
+ export interface Service {
+-    endpoint: URL;
++    endpoint?: URL;
+     token: string;
+     rateLimiter?: RateLimiter;
+     fetch?: typeof _fetch;
+diff --git a/node_modules/web3.storage/src/lib/interface.ts b/node_modules/web3.storage/src/lib/interface.ts
+index fa7c090..54ba44b 100644
+--- a/node_modules/web3.storage/src/lib/interface.ts
++++ b/node_modules/web3.storage/src/lib/interface.ts
+@@ -13,7 +13,7 @@ import {
+ export type Tagged<T, Tag> = T & { tag?: Tag }
+ 
+ export interface Service {
+-  endpoint: URL
++  endpoint?: URL
+   token: string
+   rateLimiter?: RateLimiter
+   fetch?: typeof _fetch
