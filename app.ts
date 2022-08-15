@@ -2,8 +2,8 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import morgan from "morgan";
-import { PublicKey } from "@solana/web3.js";
-import metaplex from "./utils/metaplex";
+import { File } from "web3.storage";
+import { makeStorageClient } from "./utils/web3Storage";
 
 const app = express();
 
@@ -13,31 +13,24 @@ app.use(cors());
 
 app.use(morgan("dev"));
 
-app.get("/all/:id", async (req: Request, res: Response) => {
-	const allNfts = await metaplex
-		.nfts()
-		.findAllByOwner(new PublicKey(req.params.id))
-		.run();
+const makeFileFromJSON = (data) => {
+	const buffer = Buffer.from(JSON.stringify(data));
 
-	return res.json({
-		data: allNfts,
-	});
-});
+	return new File([buffer], `metadata-${data["name"]}.json`);
+};
 
 app.post("/uploadMetadata", async (req: Request, res: Response) => {
-	const { name, desc, image } = req.body;
-	const { uri } = await metaplex
-		.nfts()
-		.uploadMetadata({
-			name,
-			desc,
-			image,
-		})
-		.run();
-	console.log(uri); // https://arweave.net/789
+	// const { name, desc, image } = req.body;
+
+	const obj = { hello: "world" };
+	const file = makeFileFromJSON(obj);
+
+	const client = makeStorageClient();
+	const cid = await client.put([file]);
+	console.log("stored files with cid: ", cid);
 
 	return res.json({
-		data: uri,
+		data: cid,
 	});
 });
 
