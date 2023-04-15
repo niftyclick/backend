@@ -11,7 +11,5 @@ cd backend
 
 yarn
 
-yarn postinstall
-
 yarn dev
 ```

@@ -1,29 +1,39 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
 import morgan from "morgan";
-import { makeStorageClient, makeFileFromJSON } from "./utils/web3Storage";
+import mintNFT from "./utils/mint";
+import { PublicKey } from "@solana/web3.js";
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cors());
 
 app.use(morgan("dev"));
 
-app.post("/uploadMetadata", async (req: Request, res: Response) => {
-	const { name, desc, image, address } = req.body;
+app.get("/", (req: Request, res: Response) => {
+	return res.send(
+		"NiftyClick's server :). Check us out @ https://twitter.com/niftyclickhq/"
+	);
+});
 
-	const file = makeFileFromJSON(name, desc, image, address);
+app.post("/create", async (req: Request, res: Response) => {
+	const { account, name, symbol, uri, seller_fee, network } = req.body;
 
-	const client = makeStorageClient();
-	const cid = await client.put([file]);
-	console.log("stored files with cid: ", cid);
+	let amount;
 
-	return res.json({
-		data: cid,
-	});
+	const { transaction, message } = await mintNFT(
+		new PublicKey(account),
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		(amount = 0.02),
+		uri,
+		name,
+		symbol,
+		parseInt(seller_fee),
+		network
+	);
+
+	return res.status(200).json({ transaction, message });
 });
 
 export default app;
