@@ -8,7 +8,6 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
-
 app.use(morgan("dev"));
 
 app.get("/", (req: Request, res: Response) => {
@@ -18,19 +17,19 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.post("/create", async (req: Request, res: Response) => {
-	const { account, name, symbol, uri, seller_fee, network } = req.body;
-
-	let amount;
+	const { account, name, symbol, uri, seller_fee, network, in_base64 } =
+		req.body;
+	console.log(req.body);
 
 	const { transaction, message } = await mintNFT(
 		new PublicKey(account),
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		(amount = 0.02),
+		0.02,
 		uri,
 		name,
 		symbol,
 		parseInt(seller_fee),
-		network
+		network,
+		in_base64
 	);
 
 	return res.status(200).json({ transaction, message });
